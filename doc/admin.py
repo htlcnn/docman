@@ -5,7 +5,7 @@ from .models import Doc, SaveLocation
 
 
 class DocAdminForm(forms.ModelForm):
-    date = forms.DateField(input_formats=['%d/%m/%Y', ], widget=forms.DateInput)
+    date = forms.DateField(input_formats=['%d/%m/%Y', ], widget=admin.widgets.AdminDateWidget())
 
     class Meta:
         model = Doc
