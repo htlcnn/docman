@@ -12,8 +12,7 @@ class SaveLocation(MPTTModel):
         order_insertion_by = ['name']
 
     class Meta:
-        verbose_name = 'Nơi lưu'
-        verbose_name_plural = 'Nơi lưu'
+        verbose_name = verbose_name_plural = 'Nơi lưu'
 
     def __str__(self):
         return self.name
@@ -42,8 +41,7 @@ class Collection(models.Model):
     summary = models.TextField(null=True, blank=True)
 
     class Meta:
-        verbose_name = 'Tập hồ sơ'
-        verbose_name_plural = 'Tập hồ sơ'
+        verbose_name = verbose_name_plural = 'Tập hồ sơ'
 
     def __str__(self):
         if self.project:
@@ -61,8 +59,7 @@ class Document(models.Model):
     projects = models.ManyToManyField(Project, verbose_name='Dự án')
 
     class Meta:
-        verbose_name = 'Tài liệu'
-        verbose_name_plural = 'Tài liệu'
+        verbose_name = verbose_name_plural = 'Tài liệu'
 
     def __str__(self):
         return self.number
