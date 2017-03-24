@@ -1,22 +1,25 @@
 from django.contrib import admin
 from django import forms
-from .models import Doc, SaveLocation
+from .models import Document, SaveLocation, Project, Collection
 # Register your models here.
 
 
-class DocAdminForm(forms.ModelForm):
-    date = forms.DateField(input_formats=['%d/%m/%Y', ], widget=admin.widgets.AdminDateWidget())
-
+class DocumentAdminForm(forms.ModelForm):
     class Meta:
-        model = Doc
-        fields = ['no', 'date', 'summary', 'issued_by', 'location', 'tags']
+        model = Document
+        fields = ('__all__')
+        widgets = {
+            'date': admin.widgets.AdminDateWidget(format='%d/%m/%Y'),
+        }
 
 
-@admin.register(Doc)
-class DocAdmin(admin.ModelAdmin):
-    list_display = ('no', 'date', 'summary', 'issued_by', 'location')
-    form = DocAdminForm
+@admin.register(Document)
+class DocumentAdmin(admin.ModelAdmin):
+    form = DocumentAdminForm
+    filter_horizontal = ('projects', 'collections')
 
 
 admin.site.register(SaveLocation)
+admin.site.register(Project)
+admin.site.register(Collection)
 

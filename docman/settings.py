@@ -1,4 +1,3 @@
-from django.conf.locale.en import formats as en_formats
 """
 Django settings for docman project.
 
@@ -39,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mptt',
-    'taggit',
     'doc.apps.DocConfig',
 ]
 
@@ -123,7 +121,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
-en_formats.DATE_FORMAT = "d/m/Y"
-
-DATE_FORMAT = "d/m/Y"
+DATE_INPUT_FORMATS = ("%d/%m/%Y", )
+DATE_FORMAT = 'd/m/Y'
