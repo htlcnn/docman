@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 
 # Create your models here.
@@ -27,8 +28,10 @@ class Project(models.Model):
     time = models.CharField(max_length=250, verbose_name='Thời gian thực hiện')
 
     class Meta:
-        verbose_name = 'Dự án'
-        verbose_name_plural = 'Dự án'
+        verbose_name = verbose_name_plural = 'Dự án'
+
+    def get_absolute_url(self):
+        return reverse('doc:project-detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.name
@@ -55,11 +58,15 @@ class Document(models.Model):
     date = models.DateField(verbose_name='Ngày')
     summary = models.TextField(verbose_name='Trích yếu')
     issued_by = models.CharField(max_length=250, verbose_name='Nơi ban hành')
-    collections = models.ManyToManyField(Collection, verbose_name='Tập hồ sơ')
-    projects = models.ManyToManyField(Project, verbose_name='Dự án')
+    collections = models.ManyToManyField(Collection, verbose_name='Tập hồ sơ', blank=True)
+    projects = models.ManyToManyField(Project, verbose_name='Dự án', blank=True)
+    file = models.FileField(null=True, blank=True)
 
     class Meta:
         verbose_name = verbose_name_plural = 'Tài liệu'
+
+    def get_projects(self):
+        return self.projects.all()
 
     def __str__(self):
         return self.number

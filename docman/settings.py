@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mptt',
+    'django_filters',
+    'django_tables2',
+    'import_export',
     'doc.apps.DocConfig',
 ]
 
@@ -123,3 +128,7 @@ STATIC_URL = '/static/'
 
 DATE_INPUT_FORMATS = ("%d/%m/%Y", )
 DATE_FORMAT = 'd/m/Y'
+
+PROJECT_ROOT = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'userfiles')
+MEDIA_URL = '/files/'
