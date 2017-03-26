@@ -4,6 +4,7 @@ from import_export.admin import ImportExportModelAdmin
 from django.contrib.admin.helpers import ActionForm
 from django import forms
 from .models import Document, SaveLocation, Project, Collection
+from django.db import IntegrityError
 # Register your models here.
 
 
@@ -52,14 +53,15 @@ class DocumentAdmin(ImportExportModelAdmin):
     list_per_page = 10
     ordering = ['-date']
     resource_class = DocumentResource
+    save_on_top = True
     search_fields = ('number', 'date', 'issued_by', 'summary', 'projects__name')
 
     def get_projects(self, obj):
-        return ", ".join([project.name for project in obj.projects.all()])
+        return ", ".join([p.name for p in obj.projects.all()])
     get_projects.short_description = 'Dự án'
 
     def get_collections(self, obj):
-        return ", ".join([collection.name for collection in obj.collections.all()])
+        return ", ".join([c.name for c in obj.collections.all()])
     get_collections.short_description = 'Tập hồ sơ'
 
     def bulk_edit_issued_by(self, request, queryset):
@@ -70,15 +72,19 @@ class DocumentAdmin(ImportExportModelAdmin):
     def bulk_edit_projects(self, request, queryset):
         projects = request.POST.get('projects')
         for doc in queryset:
-            for project in projects:
-                doc.projects.add(projects)
+            if projects:
+                try:
+                    doc.projects.add(*projects)
+                except IntegrityError:
+                    pass
+            else:
+                doc.projects.clear()
     bulk_edit_projects.short_description = 'Update Dự án'
 
     def bulk_edit_collections(self, request, queryset):
         collections = request.POST.get('collections')
-        for doc in queryset:
-            for collection in collections:
-                    doc.collections.add(collection)
+        for doc in queryset.exclude(collections__in=collections):
+            doc.collections.add(collections)
     bulk_edit_collections.short_description = 'Update Tập hồ sơ'
 
 
