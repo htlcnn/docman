@@ -47,8 +47,9 @@ class DocumentAdmin(ImportExportModelAdmin):
     action_form = BulkForm
     date_hierarchy = 'date'
     filter_horizontal = ('projects', 'collections')
-    list_display = ('number', 'date', 'issued_by', 'summary', 'get_projects', 'file')
-    list_filter = ('issued_by', 'projects')
+    list_display = ('number', 'date', 'issued_by', 'summary', 'get_collections', 'get_projects', 'file')
+    list_filter = ('projects', 'collections')
+    list_per_page = 10
     ordering = ['-date']
     resource_class = DocumentResource
     search_fields = ('number', 'date', 'issued_by', 'summary', 'projects__name')
@@ -56,6 +57,10 @@ class DocumentAdmin(ImportExportModelAdmin):
     def get_projects(self, obj):
         return ", ".join([project.name for project in obj.projects.all()])
     get_projects.short_description = 'Dự án'
+
+    def get_collections(self, obj):
+        return ", ".join([collection.name for collection in obj.collections.all()])
+    get_collections.short_description = 'Tập hồ sơ'
 
     def bulk_edit_issued_by(self, request, queryset):
         value = request.POST.get('value')
@@ -73,8 +78,8 @@ class DocumentAdmin(ImportExportModelAdmin):
         collections = request.POST.get('collections')
         for doc in queryset:
             for collection in collections:
-                doc.collections.add(collection)
-    bulk_edit_projects.short_description = 'Update Tập hồ sơ'
+                    doc.collections.add(collection)
+    bulk_edit_collections.short_description = 'Update Tập hồ sơ'
 
 
 admin.site.register(SaveLocation)

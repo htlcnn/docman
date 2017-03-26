@@ -68,5 +68,8 @@ class Document(models.Model):
     def get_projects(self):
         return self.projects.all()
 
+    def get_collections(self):
+        return self.collections.all()
+
     def __str__(self):
         return self.number
